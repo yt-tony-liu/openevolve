@@ -168,5 +168,10 @@ class OpenAILLM(LLMInterface):
         # Logging of system prompt, user message and response content
         logger = logging.getLogger(__name__)
         logger.debug(f"API parameters: {params}")
+        
+        if not hasattr(response, 'choices') or not response.choices:
+            logger.error(f"Invalid API response: {response}")
+            raise ValueError(f"API returned empty choices. Response: {response}")
+            
         logger.debug(f"API response: {response.choices[0].message.content}")
         return response.choices[0].message.content
